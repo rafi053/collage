@@ -1,0 +1,13 @@
+"use strict";
+// import express, { Router } from 'express';
+// import { login, register } from '../controllers/userController.js';
+// const router: Router = express.Router();
+// router.route('/login').post(login);
+// router.route('/addGrade').post(register);
+// router.route('/removeGrade').get(register);
+// router.route('/editGrade').get(register);
+// router.route('/users').post(register);
+// router.route('/usersGrades').post(register);
+// router.route('/usersGradesAverage').post(register);
+// router.route('/deleteUser').post(register);
+// export default router;
