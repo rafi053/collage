@@ -1,36 +1,34 @@
-import mongoose from "mongoose";
-import { Grades } from "../models/userModel";
+import mongoose, { Schema } from 'mongoose';
+import { Grades, User } from "../models/userModel";
 
-const GradesSchema = new mongoose.Schema({
+const GradesSchema = new Schema<Grades>({
     subject: {
         type: String,
-        required: [true, "Please enter subject"],
         trim: true
     },
 
     grade: {
         type: Number,
-        required: [true, "Please enter grade"],
         trim: true
     }
   });
 
-const UserSchema = new mongoose.Schema(
+const UserSchema = new Schema<User>(
     {
         fullName:{
             type: String,
             required: [true,"Please enter full name"],
-            unique: [true, "FullName already exists"],
+            // unique: [true, "FullName already exists"],
             trim: true
-        } as any,
+        } ,
         passportId:{
             type: Number,
             required: [true,"Please enter passport id"],
             minlength: [9,"The passport id must be 9 digits"],
             maxlength: [9,"The passport id must be 9 digits"],
-            unique: [true, "Passport id already exists"],
+            // unique: [true, "Passport id already exists"],
             trim: true
-        }as any,
+        },
         password:{
             type: String,
             required: [true,"Please enter password"],
@@ -39,7 +37,7 @@ const UserSchema = new mongoose.Schema(
         grades:{
             type:[GradesSchema],
             trim: true
-        } as any,
+        } ,
 
         role:{
             type: String,

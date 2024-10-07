@@ -7,7 +7,7 @@ import { Grades, User } from '../models/userModel.js';
 
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { fullName, password  }: User = req.body;
+    const { fullName, password  } = req.body;
 
     if (!fullName || !password) {
       res.status(400).json({ error: "Username and password are required." });
@@ -30,7 +30,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 export const grades = async (req: Request, res: Response): Promise<void> => {
     try {
       const gradesUser: string = req.params.id;
-      const grades:Grades = await userGrades(gradesUser);
+      const grades:Grades[] = await userGrades(gradesUser);
       res.status(201).json({ grades });
     } catch (error: any) {
       if (error.message === "Username already exists.") {
