@@ -18,8 +18,8 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const user:User | unknown = await adminRegister(newUser);
-    res.status(201).json(user);
+    const user:User = await adminRegister(newUser);
+    res.status(201).json({user});
   } catch (error: any) {
     if (error.message === "Username already exists.") {
       res.status(409).json({ error: error.message });

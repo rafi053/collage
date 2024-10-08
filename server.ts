@@ -1,6 +1,6 @@
 import express, { Application } from 'express';
 import userRouter from './routes/userRoutes.js'
-// import teacherRouter from './routes/teacherRoutes.js'
+import teacherRouter from './routes/teacherRoutes.js'
 import adminRouter from './routes/adminRoutes.js'
 import connectDb from './config/db.js';
 import dotenv from "dotenv"
@@ -16,7 +16,7 @@ const app: Application = express();
 
 connectDb();
 app.use(express.json());
-// app.use('/teachers', teacherRouter);
+app.use('/teachers', teacherRouter);
 app.use('/users', userRouter);
 app.use('/admin', adminRouter);
 

@@ -1,7 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import { userLogin, userGrades, userGradesAverage } from "../services/userService.js";
-
-
 import { Grades, User } from '../models/userModel.js';
 
 

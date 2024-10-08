@@ -4,7 +4,7 @@ export interface User extends Document{
     fullName: string;
     passportId: number;
     password: string;
-    grades?: number[];
+    grades?: Grades[];
     role: string;
   }
   
