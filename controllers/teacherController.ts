@@ -1,22 +1,17 @@
 import { Request, Response, NextFunction } from 'express';
-import { teacherLogin, TeacherAddGrade, removeTeacherGrade, editTeacherGrade, teacherGetUsers, teacherGetUsersGrades, teacherGetusersGradesAverage, teacherdeleteUser } from "../services/teacherService";
+import { teacherLogin, TeacherAddGrade, removeTeacherGrade, editTeacherGrade, teacherGetUsers, teacherGetUserGrades, teacherGetUserGradesAverage, teacherdeleteUser } from "../services/teacherService";
 import { Grades, User } from '../models/userModel.js';
 
 
 export const login = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { fullName, password  } = req.body;
-  
-      if (!fullName || !password) {
-        res.status(400).json({ error: "Username and password are required." });
-        return;
-      }
-  
-      const user:User = await teacherLogin(fullName, password);
-      if (!user) {
-        res.status(401).json({ error: "Invalid username or password." });
-        return;
-      }
+        const studentId: string = req.params.id;
+        const user = await teacherLogin(studentId);
+        if (!user) {
+            res.status(404).json({ error: "User not found." });
+            return;
+        }
+        res.status(200).json({ user });
     } catch (error) {
       console.error("Error logging in user:", error);
       res.status(500).json({ error: "Internal server error." });
@@ -27,9 +22,9 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 export const addGrade = async (req: Request, res: Response): Promise<void> => {
     try {
         const studentId: string = req.params.id;
-        const  grade = req.body;
+        const  grade:Grades = req.body;
         if (!grade) {
-            res.status(400).json({ error: "Student ID and grade are required." });
+            res.status(400).json({ error: "Student  grade is required." });
             return;
         }
         const user = await TeacherAddGrade(studentId, grade);
@@ -48,7 +43,8 @@ export const addGrade = async (req: Request, res: Response): Promise<void> => {
 export const removeGrade = async (req: Request, res: Response): Promise<void> => {
     try {
         const studentId: string = req.params.id;
-        const user = await removeTeacherGrade(studentId);
+        const subject: string = req.body;
+        const user = await removeTeacherGrade(studentId,subject);
         if (!user) {
             res.status(404).json({ error: "User not found." });
             return;
@@ -64,7 +60,8 @@ export const removeGrade = async (req: Request, res: Response): Promise<void> =>
 export const editGrade = async (req: Request, res: Response): Promise<void> => {
     try {
         const studentId: string = req.params.id;
-        const user = await editTeacherGrade(studentId);
+        const  grade:Grades = req.body;
+        const user = await editTeacherGrade(studentId,grade);
         if (!user) {
             res.status(404).json({ error: "User not found." });
             return;
@@ -80,7 +77,8 @@ export const editGrade = async (req: Request, res: Response): Promise<void> => {
 
 export const users = async (req: Request, res: Response): Promise<void> => {
     try{
-        const users: User[] = await teacherGetUsers();
+        const users: User[] | null = await teacherGetUsers();
+        res.status(201).json({ users });
     }
         
     catch (error) {
@@ -89,10 +87,11 @@ export const users = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-export const usersGrades = async (req: Request, res: Response): Promise<void> => {
+export const userGrades = async (req: Request, res: Response): Promise<void> => {
     try {
-        const usersGrades:any = await teacherGetUsersGrades();
-            
+        const studentId: string = req.params.id;
+        const usersGrades:Grades[] | null = await teacherGetUserGrades(studentId);
+        res.status(201).json({ usersGrades });
     }
     catch (error) {
         console.error("Error adding grade to user:", error);
@@ -100,10 +99,12 @@ export const usersGrades = async (req: Request, res: Response): Promise<void> =>
     }   
 };
 
-export const usersGradesAverage = async (req: Request, res: Response): Promise<void> => {
+export const usersGradeAverage = async (req: Request, res: Response): Promise<void> => {
     try {
-        const usersGradesAverage: number = await teacherGetusersGradesAverage();
-       
+        const studentId: string = req.params.id;
+        const usersGradesAverage: number | null = await teacherGetUserGradesAverage(studentId);
+        res.status(201).json({ usersGradesAverage });
+
     }
     catch (error) {
         console.error("Error getting grades for user:", error);

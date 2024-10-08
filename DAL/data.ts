@@ -1,34 +1,48 @@
 import { Grades, User } from "../models/userModel.js";
 import  USER from "../schemas/userSchema.js";
+import { UpdateResult } from "mongodb";
 
 
-export const create = async (user:User): Promise<User> => {
+export const createUser = async (user:User): Promise<User> => {
         const userToAdd: User = await USER.create(user);
         return userToAdd;
 };
 
-export const get = async (fullName: string, password: string): Promise<User> => {
-        const userToAdd: any= await USER.find({ fullName: fullName, password: password });
-        return userToAdd;
+export const findUserById = async (id: string): Promise<User | null> => {
+        const userFind: User | null = await USER.findById({ _id: id });
+        return userFind;
 };
 
-export const findUser = async (id: string): Promise<User> => {
-        const user: any = await USER.find({ _id: id });
-        return user;
-};
 
-export const getAll = async (): Promise<User[]> => {
-        const users: User [] = await USER.find();
+export const getAllUsers = async (): Promise<User[] | null> => {
+        const users: User[] | null = await USER.find();
         return users;
 };
 
-export const dleate = async (id: string, grade:number): Promise<User | unknown> => {
-        const userToAdd: User | unknown = await USER.deleteOne({ _id: id });
-        return userToAdd;
+export const delateGrade = async (id: string, subject:string): Promise<User | null> => {
+        const gradeToDelete: UpdateResult<Document> = await USER.updateOne({ _id: id } ,{$Pull: {grades: {subject: subject}}});
+        const user: User | null = await USER.findById({ _id: id });
+        return user;
 };
 
 
-export const edit = async (id: string, grade:number): Promise<User | unknown> => {
-        const userToAdd: User | unknown = await USER.find({ _id: id });
-        return userToAdd;
+export const editGrade = async (id: string, grade:Grades): Promise<User | null> => {
+        const userToAdd: UpdateResult<Document> = await USER.updateOne({ _id: id } ,{$set: {grades: grade}});
+        const user: User | null = await USER.findById({ _id: id });
+        return user;
+};
+
+
+export const addGrade = async (id: string, grade:Grades): Promise<User | null> => {
+        const gradeToAdd: UpdateResult<Document> = await USER.updateOne({ _id: id } ,{$push: {grades: grade}});
+        const user: User | null = await USER.findById({ _id: id });
+        return user;
+};
+
+
+
+export const deleteUser = async (id: string): Promise<User[] | null> => {
+        await USER.deleteOne({ _id: id });
+        const users: User[] | null = await USER.find();
+        return users;
 };
