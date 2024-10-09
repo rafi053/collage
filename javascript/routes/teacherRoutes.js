@@ -1,15 +1,7 @@
-import express, { Router } from 'express';
+import express from 'express';
 import { addGrade, removeGrade, editGrade, users, userGrades, usersGradeAverage, deleteUser } from '../controllers/teacherController.js';
 import { teacherMiddleware } from "../middlewares/teacherMiddleware.js";
-
-
-const router: Router = express.Router();
-
-
-
-
-
-
+const router = express.Router();
 // /**
 //  * @swagger
 //  * /users:
@@ -163,8 +155,7 @@ const router: Router = express.Router();
 //  *         description: The list of tags
 //  *   
 // */
-
-router.use(teacherMiddleware as any);
+router.use(teacherMiddleware);
 router.route('/addGrade/:id').put(addGrade);
 router.route('/removeGrade/:id').delete(removeGrade);
 router.route('/editGrade/:id').put(editGrade);
@@ -172,8 +163,4 @@ router.route('/users').get(users);
 router.route('/usersGrades/:id').get(userGrades);
 router.route('/usersGradesAverage/:id').get(usersGradeAverage);
 router.route('/deleteUser/:id').delete(deleteUser);
-
-
-
-
 export default router;

@@ -13,6 +13,11 @@ export const findUserById = async (id: string): Promise<User | null> => {
         return userFind;
 };
 
+export const findUserByFullNameAndPassword = async (fullName: string, password: string): Promise<User | null> => {
+        const userFind: User | null = await USER.findOne({ fullName: fullName, password: password });
+        return userFind;
+}
+
 
 export const getAllUsers = async (): Promise<User[] | null> => {
         const users: User[] | null = await USER.find();

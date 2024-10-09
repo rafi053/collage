@@ -1,22 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { userLogin, userGrades, userGradesAverage } from "../services/userService.js";
-import { Grades, User } from '../models/userModel.js';
-
-
-export const login = async (req: Request, res: Response): Promise<void> => {
-  try {
-      const studentId: string = req.params.id;
-      const user = await userLogin(studentId);
-      if (!user) {
-          res.status(404).json({ error: "User not found." });
-          return;
-      }
-      res.status(200).json({ user });
-  } catch (error) {
-    console.error("Error logging in user:", error);
-    res.status(500).json({ error: "Internal server error." });
-  }
-};
+import { userGrades, userGradesAverage } from "../services/userService.js";
+import { Grades } from '../models/userModel.js';
 
 
 
